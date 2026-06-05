@@ -11,8 +11,8 @@ st.markdown(
     """
     <style>
     .app-header{
-        color: blue,
-        padding: 28px, 32px;
+        color: blue;
+        padding: 28px 32px;
     }
     </style>
     """,
@@ -29,9 +29,9 @@ if "tasks" not in st.session_state:
 st.markdown(
     """
     <div class = "app-header" >
-    <h1> GÖREV LİSTESİ<h1/>
+    <h1> GÖREV LİSTESİ</h1>
     <p>TEST PROJEMİZ<p/>
-    <div/>
+    </div>
     """,
     unsafe_allow_html=True
 )
@@ -47,5 +47,26 @@ with col_btn:
 st.write("")
 
 #GÖREVLERİN LİSTESİ
+if not st.session_state.tasks:
+    st.info("Burası şua na boş!")
 
+for i, task in enumerate(st.session_state.tasks):
+    c1,c2,c3 = st.columns([0.5,5,0.8])
+    with c1:
+        checked = st.checkbox("",value= task["done"], key=f"chk_{1}",label_visibility="collapsed") #Label kapalı
+        if checked != task["done"]:
+            st.session_state.tasks[i]["done"] = checked
+            st.rerun(),
+    with c2:
+        st.markdown(
+            """
+            
+            <div> {task["text"]} </div>
+            """,
+            unsafe_allow_html=True
+        )
+    with c3:
+        if st.button("X", key=f"del_ {i}"):
+            st.session_state.tasks.pop(i)
+            st.rerun()
 #ÖZET
