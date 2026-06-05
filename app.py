@@ -1,11 +1,11 @@
 import streamlit as st #Streamlit
-
 import pandas as pd
 
 #Sayfa configutr ayarı yapılır. Bu sayfanın temel özelliklerini belirtir.
-st.set_page_config(page_title="Mini Görev Panaosu",
+st.set_page_config(page_title="Mini Görev Panosu",
                    page_icon="pictures/789.png",
                    layout="centered")
+
 #STYLE -> CSS KISMI
 st.markdown(
     """
@@ -17,24 +17,26 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
-
 )
+
 #DURUM -> Görev durumlarını belirten bir değişken
 if "tasks" not in st.session_state:
     st.session_state.tasks = [
         {"text": "Streamlit Hesabı Aç", "done": True},
         {"text": "Uygulamayı Yükle", "done": True}
     ]
+
 #BAŞLIK -> HTML DIV
 st.markdown(
     """
-    <div class = "app-header" >
+    <div class="app-header">
     <h1> GÖREV LİSTESİ</h1>
-    <p>TEST PROJEMİZ<p/>
+    <p>TEST PROJEMİZ</p>
     </div>
     """,
     unsafe_allow_html=True
 )
+
 #GÖREVLER EKLEME
 col_input, col_btn = st.columns([4,1])
 with col_input:
@@ -48,25 +50,31 @@ st.write("")
 
 #GÖREVLERİN LİSTESİ
 if not st.session_state.tasks:
-    st.info("Burası şua na boş!")
+    st.info("Burası şu an boş!")
 
 for i, task in enumerate(st.session_state.tasks):
-    c1,c2,c3 = st.columns([0.5,5,0.8])
+    c1, c2, c3 = st.columns([0.5, 5, 0.8])
+    
     with c1:
-        checked = st.checkbox("",value= task["done"], key=f"chk_{1}",label_visibility="collapsed") #Label kapalı
+        # key değeri dinamik olarak i'ye bağlandı
+        checked = st.checkbox("", value=task["done"], key=f"chk_{i}", label_visibility="collapsed") 
         if checked != task["done"]:
             st.session_state.tasks[i]["done"] = checked
-            st.rerun(),
-    with c2:
-        st.markdown(
-            """
+            st.rerun() # Sondaki virgül silindi
             
+    with c2:
+        # Metni okuyabilmesi için tırnakların en başına 'f' harfi eklendi
+        st.markdown(
+            f"""
             <div> {task["text"]} </div>
             """,
             unsafe_allow_html=True
         )
+        
     with c3:
-        if st.button("X", key=f"del_ {i}"):
+        # key ismindeki gereksiz boşluk kaldırıldı
+        if st.button("X", key=f"del_{i}"):
             st.session_state.tasks.pop(i)
             st.rerun()
+
 #ÖZET
